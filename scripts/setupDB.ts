@@ -74,6 +74,7 @@ const setupDB = async () => {
     await client.query(`DROP ROLE IF EXISTS ${DATABASE_OWNER};`);
 
     // Now to set up the database cleanly:
+    
 
     // This is the root role for the database`);
     await client.query(
@@ -92,6 +93,10 @@ const setupDB = async () => {
     // This enables PostGraphile to switch from ${DATABASE_AUTHENTICATOR} to ${DATABASE_VISITOR}
     await client.query(
       `GRANT ${DATABASE_VISITOR} TO ${DATABASE_AUTHENTICATOR};`
+    );
+
+    await client.query(
+      `CREATE DATABASE ${DATABASE_NAME} OWNER ${DATABASE_OWNER}`
     );
   } finally {
     client.release();
