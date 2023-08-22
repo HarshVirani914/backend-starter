@@ -15,7 +15,7 @@
    *
    * RECOMMENDATION: use `DATABASE_URL` envvar instead.
    */
-  "connectionString": ":DATABASE_URL",
+  // "connectionString": ":DATABASE_URL",
 
   /*
    * shadowConnectionString: like connectionString, but this is used for the
@@ -23,7 +23,7 @@
    *
    * RECOMMENDATION: use `SHADOW_DATABASE_URL` envvar instead.
    */
-  "shadowConnectionString": ":SHADOW_DATABASE_URL",
+  // "shadowConnectionString": ":SHADOW_DATABASE_URL",
 
   /*
    * rootConnectionString: like connectionString, but this is used for
@@ -32,7 +32,7 @@
    *
    * RECOMMENDATION: use `ROOT_DATABASE_URL` envvar instead.
    */
-  "rootConnectionString": ":ROOT_DATABASE_URL",
+  // "rootConnectionString": ":ROOT_DATABASE_URL",
 
   /*
    * pgSettings: key-value settings to be automatically loaded into PostgreSQL
@@ -62,10 +62,7 @@
    */
   "placeholders": {
     ":DATABASE_AUTHENTICATOR": "!ENV",
-    ":DATABASE_VISITOR": "!ENV",
-    ":DATABASE_URL": "!ENV",
-    ":SHADOW_DATABASE_URL": "!ENV",
-    ":ROOT_DATABASE_URL": "!ENV"
+    ":DATABASE_VISITOR": "!ENV"
   },
 
   /*

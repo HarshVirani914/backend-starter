@@ -1,7 +1,3 @@
-import installDatabasePools from "./installDatabasePools";
-import installPostGraphile from "./installPostGraphile";
-
-export {
-  installDatabasePools,
-  installPostGraphile,
-};
+export { default as installDatabasePools } from "./installDatabasePools";
+export { default as installPassport } from "./installPassport";
+export { default as installPostGraphile } from "./installPostGraphile";

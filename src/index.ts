@@ -6,8 +6,6 @@ const packageJson = require("../package.json");
 
 
 async function main() {
-
-  
   const { default: chalk } = await import("chalk");
   
   // Create our HTTP server
@@ -15,8 +13,7 @@ async function main() {
   
   // Make our application (loading all the middleware, etc)
   const app = await makeApp({ httpServer });
-  console.log(process.env.DATABASE_URL)
-  
+
   // Add our application to our HTTP server
   httpServer.addListener("request", app);
 

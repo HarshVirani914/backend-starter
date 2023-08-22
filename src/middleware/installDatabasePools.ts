@@ -6,6 +6,10 @@ export function getRootPgPool(app: Express): Pool {
   return app.get("rootPgPool");
 }
 
+export function getAuthPgPool(app: Express): Pool {
+  return app.get("authPgPool");
+}
+
 /**
  * When a PoolClient omits an 'error' event that cannot be caught by a promise
  * chain (e.g. when the PostgreSQL server terminates the link but the client
@@ -29,5 +33,9 @@ export default (app: Express) => {
   app.set("rootPgPool", rootPgPool);
 
   // This pool runs as the unprivileged user, it's what PostGraphile uses.
-
+  const authPgPool = new Pool({
+    connectionString: process.env.AUTH_DATABASE_URL,
+  });
+  authPgPool.on("error", swallowPoolError);
+  app.set("authPgPool", authPgPool);
 };

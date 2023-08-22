@@ -15,8 +15,6 @@ const setupDB = async () => {
     CONFIRM_DROP,
   } = process.env;
 
-  console.log("DATABASE_AUTHENTICATOR " + DATABASE_AUTHENTICATOR)
-
   if (!CONFIRM_DROP) {
     const { default: inquirer } = await import("inquirer");
     const input = await inquirer.prompt([
