@@ -1,33 +1,31 @@
-import { createServer } from "http";
-import { makeApp } from "./app";
+import { createServer } from 'http';
+import { makeApp } from './app';
 
 // @ts-ignore
-const packageJson = require("../package.json");
-
+const packageJson = require('../package.json');
 
 async function main() {
-  const { default: chalk } = await import("chalk");
-  
+  const { default: chalk } = await import('chalk');
+
   // Create our HTTP server
   const httpServer = createServer();
-  
+
   // Make our application (loading all the middleware, etc)
   const app = await makeApp({ httpServer });
 
   // Add our application to our HTTP server
-  httpServer.addListener("request", app);
-
+  httpServer.addListener('request', app);
 
   // And finally, we open the listen port
-  const PORT = parseInt(process.env.PORT || "", 10) || 3000;
+  const PORT = parseInt(process.env.PORT || '', 10) || 3000;
   httpServer.listen(PORT, () => {
     const address = httpServer.address();
     const actualPort: string =
-      typeof address === "string"
+      typeof address === 'string'
         ? address
         : address && address.port
-          ? String(address.port)
-          : String(PORT);
+        ? String(address.port)
+        : String(PORT);
     console.log();
     console.log(
       chalk.green(
@@ -52,8 +50,7 @@ async function main() {
 }
 
 main().catch((e) => {
-  console.error("Fatal error occurred starting server!");
+  console.error('Fatal error occurred starting server!');
   console.error(e);
   process.exit(101);
 });
-

@@ -1,6 +1,6 @@
-import passport from "passport";
-import { Express } from "express";
-import { Strategy as JWTStrategy, ExtractJwt } from "passport-jwt";
+import passport from 'passport';
+import { Express } from 'express';
+import { Strategy as JWTStrategy, ExtractJwt } from 'passport-jwt';
 
 const installJWTStrategy = async (app: Express) => {
   passport.use(

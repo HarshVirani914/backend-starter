@@ -1,13 +1,12 @@
-import { Express } from "express";
-import { Pool } from "pg";
-
+import { getShutdownActions } from '../app';
+import { Express } from 'express';
+import { Pool } from 'pg';
 
 export function getRootPgPool(app: Express): Pool {
-  return app.get("rootPgPool");
+  return app.get('rootPgPool');
 }
-
 export function getAuthPgPool(app: Express): Pool {
-  return app.get("authPgPool");
+  return app.get('authPgPool');
 }
 
 /**
@@ -19,9 +18,8 @@ export function getAuthPgPool(app: Express): Pool {
  *
  * TODO: log this to an error reporting service.
  */
-function swallowPoolError(error: Error) {
+function swallowPoolError(_error: Error) {
   /* noop */
-  console.log("swallowPoolError", error);
 }
 
 export default (app: Express) => {
@@ -29,13 +27,27 @@ export default (app: Express) => {
   const rootPgPool = new Pool({
     connectionString: process.env.DATABASE_URL,
   });
-  rootPgPool.on("error", swallowPoolError);
-  app.set("rootPgPool", rootPgPool);
+
+  rootPgPool.on('error', swallowPoolError);
+
+  app.set('rootPgPool', rootPgPool);
 
   // This pool runs as the unprivileged user, it's what PostGraphile uses.
   const authPgPool = new Pool({
     connectionString: process.env.AUTH_DATABASE_URL,
   });
-  authPgPool.on("error", swallowPoolError);
-  app.set("authPgPool", authPgPool);
+
+  authPgPool.on('error', swallowPoolError);
+
+  app.set('authPgPool', authPgPool);
+
+  const shutdownActions = getShutdownActions(app);
+
+  shutdownActions.push(() => {
+    rootPgPool.end();
+  });
+
+  shutdownActions.push(() => {
+    authPgPool.end();
+  });
 };

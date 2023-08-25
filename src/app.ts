@@ -1,36 +1,49 @@
-import cors from "cors";
-import dotenv from "dotenv";
-import express, { Express } from "express";
-import { Server } from "http";
-import { Middleware } from "postgraphile";
-import { installDatabasePools, installPassport, installPostGraphile } from "./middleware";
-
+import cors from 'cors';
+import dotenv from 'dotenv';
+import express, { Express } from 'express';
+import { Server } from 'http';
+import { Middleware } from 'postgraphile';
+import {
+  installDatabase,
+  installPassport,
+  installPostGraphile,
+} from './middleware';
+import { ShutdownAction, makeShutdownActions } from './shutdownActions';
 
 export function getHttpServer(app: Express): Server | null {
-  return app.get("httpServer") ?? null;
+  return app.get('httpServer') ?? null;
+}
+
+export function getShutdownActions(app: Express): ShutdownAction[] {
+  return app.get("shutdownActions");
 }
 
 export function getWebsocketMiddlewares(
   app: Express
 ): Middleware<express.Request, express.Response>[] {
-  return app.get("websocketMiddlewares");
+  return app.get('websocketMiddlewares');
 }
 
-export const makeApp = async ({ httpServer }: {
+export const makeApp = async ({
+  httpServer,
+}: {
   httpServer?: Server;
 } = {}): Promise<Express> => {
   dotenv.config();
+
+  const shutdownActions = makeShutdownActions();
+
   const app: Express = express();
 
-  app.set("httpServer", httpServer);
+  app.set('httpServer', httpServer);
 
-  app.use(cors())
+  app.set("shutdownActions", shutdownActions);
 
-  await installDatabasePools(app);
+  app.use(cors());
+
+  await installDatabase(app);
   await installPassport(app);
   await installPostGraphile(app);
 
   return app;
-}
-
-
+};

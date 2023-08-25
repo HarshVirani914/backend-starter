@@ -1,7 +1,7 @@
-import { Build } from "graphile-build";
-import { GraphileHelpers } from "graphile-utils/node8plus/fieldHelpers";
-import { GraphQLResolveInfo } from "graphql";
-import { OurGraphQLContext } from "../middleware/installPostGraphile";
+import { Build } from 'graphile-build';
+import { GraphileHelpers } from 'graphile-utils/node8plus/fieldHelpers';
+import { GraphQLResolveInfo } from 'graphql';
+import { OurGraphQLContext } from '../middleware/installPostGraphile';
 
 export const register = async (
   args: any,
@@ -38,8 +38,8 @@ export const register = async (
     );
 
     if (!details || !details.user_id) {
-      const e: any = new Error("Registration failed");
-      e["code"] = "FFFFF";
+      const e: any = new Error('Registration failed');
+      e['code'] = 'FFFFF';
       throw e;
     }
 
@@ -69,16 +69,16 @@ export const register = async (
     };
   } catch (e: any) {
     const { code } = e;
-    const safeErrorCodes = ["WEAKP", "LOCKD", "EMTKN"];
+    const safeErrorCodes = ['WEAKP', 'LOCKD', 'EMTKN'];
     if (safeErrorCodes.includes(code)) {
       throw e;
     } else {
       console.error(
-        "Unrecognised error in PassportLoginPlugin; replacing with sanitized version"
+        'Unrecognised error in PassportLoginPlugin; replacing with sanitized version'
       );
       console.error(e);
-      const error: any = new Error("Registration failed");
-      error["code"] = code;
+      const error: any = new Error('Registration failed');
+      error['code'] = code;
       throw error;
     }
   }

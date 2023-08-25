@@ -1,6 +1,7 @@
-import { gql, makeExtendSchemaPlugin } from "graphile-utils";
-import { login, register } from "../auth";
-import { OurGraphQLContext } from "../middleware/installPostGraphile";
+import { gql, makeExtendSchemaPlugin } from 'graphile-utils';
+import { login, register } from '../auth';
+
+import { OurGraphQLContext } from '../middleware/installPostGraphile';
 
 const PassportLoginPlugin = makeExtendSchemaPlugin((build) => ({
   typeDefs: gql`
@@ -95,7 +96,7 @@ const PassportLoginPlugin = makeExtendSchemaPlugin((build) => ({
 
       async logout(_mutation, _args, context: OurGraphQLContext, _resolveInfo) {
         const { pgClient, logout } = context;
-        await pgClient.query("select app_public.logout();");
+        await pgClient.query('select app_public.logout();');
         await logout();
         return {
           success: true,

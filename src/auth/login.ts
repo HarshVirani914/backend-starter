@@ -1,7 +1,7 @@
-import { Build } from "graphile-build";
-import { GraphileHelpers } from "graphile-utils/node8plus/fieldHelpers";
-import { GraphQLResolveInfo } from "graphql";
-import { OurGraphQLContext } from "../middleware/installPostGraphile";
+import { Build } from 'graphile-build';
+import { GraphileHelpers } from 'graphile-utils/node8plus/fieldHelpers';
+import { GraphQLResolveInfo } from 'graphql';
+import { OurGraphQLContext } from '../middleware/installPostGraphile';
 
 export const login = async (
   args: any,
@@ -24,22 +24,22 @@ export const login = async (
     );
 
     if (!session) {
-      const error: any = new Error("Incorrect email/password");
-      error["code"] = "CREDS";
+      const error: any = new Error('Incorrect email/password');
+      error['code'] = 'CREDS';
       throw error;
     }
 
-
-    console.log("sessionId", sessionId);
+    console.log('sessionId', sessionId);
 
     // Tell Passport.js we're logged in
     const token = await login({ session_id: session.id });
 
-    console.log("{ session_id: session.id }", { session_id: session.id });
-
+    console.log('{ session_id: session.id }', { session_id: session.id });
 
     // Get session_id from PG
-    const {rows: [row1]} = await pgClient.query(
+    const {
+      rows: [row1],
+    } = await pgClient.query(
       `select set_config('jwt.claims.session_id', $1, true)`,
       [session.id]
     );
@@ -57,7 +57,7 @@ export const login = async (
       }
     );
 
-    console.log("row", row)
+    console.log('row', row);
 
     return {
       token,
@@ -65,13 +65,13 @@ export const login = async (
     };
   } catch (e: any) {
     const { code } = e;
-    const safeErrorCodes = ["LOCKD", "CREDS"];
+    const safeErrorCodes = ['LOCKD', 'CREDS'];
     if (safeErrorCodes.includes(code)) {
       throw e;
     } else {
       console.error(e);
-      const error: any = new Error("Login failed");
-      error["code"] = e.code;
+      const error: any = new Error('Login failed');
+      error['code'] = e.code;
       throw error;
     }
   }

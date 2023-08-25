@@ -1,17 +1,24 @@
-import PgManyToManyPlugin from "@graphile-contrib/pg-many-to-many";
-import PgSimplifyInflectorPlugin from "@graphile-contrib/pg-simplify-inflector";
-import { Express, Request, Response } from "express";
-import { resolve } from "path";
-import { Pool, PoolClient } from "pg";
-import { Middleware, PostGraphileOptions, enhanceHttpServerWithSubscriptions, makePluginHook, postgraphile } from "postgraphile";
-import { makePgSmartTagsFromFilePlugin } from "postgraphile/plugins";
-import { getHttpServer } from "../app";
-import { getAuthPgPool, getRootPgPool } from "./installDatabasePools";
-import { NodePlugin } from "graphile-build";
-import jwt from "jsonwebtoken";
+import { Express, Request, Response } from 'express';
+import { NodePlugin } from 'graphile-build';
+import { Pool, PoolClient } from 'pg';
+import {
+  enhanceHttpServerWithSubscriptions,
+  makePluginHook,
+  Middleware,
+  postgraphile,
+  PostGraphileOptions,
+} from 'postgraphile';
+import jwt from 'jsonwebtoken';
+import PgSimplifyInflectorPlugin from '@graphile-contrib/pg-simplify-inflector';
+import PgManyToManyPlugin from '@graphile-contrib/pg-many-to-many';
 // @ts-ignore
-import PostGraphileNestedMutations from "postgraphile-plugin-nested-mutations";
-import { PassportLoginPlugin } from "../plugins";
+import PostGraphileNestedMutations from 'postgraphile-plugin-nested-mutations';
+import { makePgSmartTagsFromFilePlugin } from 'postgraphile/plugins';
+
+import PassportLoginPlugin from '../plugins/PassportLoginPlugin';
+import { getAuthPgPool, getRootPgPool } from './installDatabase';
+import { resolve } from 'path';
+import { getHttpServer } from '../app';
 
 export interface OurGraphQLContext {
   pgClient: PoolClient;
@@ -23,12 +30,12 @@ export interface OurGraphQLContext {
 
 type UUID = string;
 
-const isTest = process.env.NODE_ENV === "test";
+const isTest = process.env.NODE_ENV === 'test';
 
 const TagsFilePlugin = makePgSmartTagsFromFilePlugin(
   // We're using JSONC for VSCode compatibility; also using an explicit file
   // path keeps the tests happy.
-  resolve(__dirname, "../../postgraphile.tags.jsonc")
+  resolve(__dirname, '../../postgraphile.tags.jsonc')
 );
 
 function uuidOrNull(input: string | number | null | undefined): UUID | null {
@@ -45,8 +52,7 @@ function uuidOrNull(input: string | number | null | undefined): UUID | null {
   }
 }
 
-const isDev = process.env.NODE_ENV === "development";
-console.log("isDev", isDev);
+const isDev = process.env.NODE_ENV === 'development';
 //const isTest = process.env.NODE_ENV === "test";
 
 const pluginHook = makePluginHook([
@@ -62,9 +68,6 @@ interface IPostGraphileOptionsOptions {
 export function getPostGraphileOptions({
   rootPgPool,
 }: IPostGraphileOptionsOptions) {
-
-  console.log(`${__dirname}/../../data/schema.graphql`)
-
   const options: PostGraphileOptions<Request, Response> = {
     /*
      * Plugins to enhance the GraphQL schema, see:
@@ -159,10 +162,10 @@ export function getPostGraphileOptions({
     /*
      * Plugins we don't want in our schema
      */
-    // skipPlugins: [
-    //   // Disable the 'Node' interface
-    //   NodePlugin,
-    // ],
+    skipPlugins: [
+      // Disable the 'Node' interface
+      NodePlugin,
+    ],
 
     graphileBuildOptions: {
       /*
@@ -210,7 +213,7 @@ export function getPostGraphileOptions({
          * can use JWTs too, if you like, and they'll use the same settings
          * names reducing the amount of code you need to write.
          */
-        "jwt.claims.session_id": sessionId,
+        'jwt.claims.session_id': sessionId,
       };
     },
 
@@ -233,7 +236,7 @@ export function getPostGraphileOptions({
 
         // Use this to tell Passport.js we're logged in
         login: async (session: any) => {
-          return jwt.sign(session, process.env.JWT_SECRET || "");
+          return jwt.sign(session, process.env.JWT_SECRET || '');
         },
 
         logout: () => {
@@ -251,19 +254,17 @@ export function getPostGraphileOptions({
 }
 
 export default async function installPostGraphile(app: Express) {
-  const rootPgPool = getRootPgPool(app);
   const authPgPool = getAuthPgPool(app);
-
-  // Forbid PostGraphile from adding websocket listeners to httpServer
+  const rootPgPool = getRootPgPool(app);
   const middleware = postgraphile<Request, Response>(
     authPgPool,
-    "app_public",
+    'app_public',
     getPostGraphileOptions({
       rootPgPool,
     })
   );
 
-  app.set("postgraphileMiddleware", middleware);
+  app.set('postgraphileMiddleware', middleware);
 
   app.use(middleware);
 

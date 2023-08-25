@@ -16,11 +16,11 @@ const setupDB = async () => {
   } = process.env;
 
   if (!CONFIRM_DROP) {
-    const { default: inquirer } = await import("inquirer");
+    const { default: inquirer } = await import('inquirer');
     const input = await inquirer.prompt([
       {
-        type: "confirm",
-        name: "confirm",
+        type: 'confirm',
+        name: 'confirm',
         default: false,
         message: `
           We're going to drop (if necessary):
@@ -35,27 +35,27 @@ const setupDB = async () => {
     ]);
 
     if (!input.confirm) {
-      console.error("Confirmation failed; exiting");
+      console.error('Confirmation failed; exiting');
       process.exit(1);
     }
   }
 
-  console.log("Installing or reinstalling the roles and database...");
+  console.log('Installing or reinstalling the roles and database...');
 
   const pgPool = new pg.Pool({
     connectionString: ROOT_DATABASE_URL,
   });
 
-  pgPool.on("error", (err) => {
+  pgPool.on('error', (err) => {
     console.log(
-      "An error occurred whilst trying to talk to the database: " + err.message
+      'An error occurred whilst trying to talk to the database: ' + err.message
     );
   });
 
   try {
     await pgPool.query('select true as "Connection test";');
-  } catch (e) {
-    if (e.code === "28P01") {
+  } catch (e: any) {
+    if (e.code === '28P01') {
       throw e;
     }
   }
@@ -72,7 +72,6 @@ const setupDB = async () => {
     await client.query(`DROP ROLE IF EXISTS ${DATABASE_OWNER};`);
 
     // Now to set up the database cleanly:
-    
 
     // This is the root role for the database`);
     await client.query(
@@ -101,10 +100,10 @@ const setupDB = async () => {
   }
   await pgPool.end();
 
-  console.log("\n\nRoles and database installed or reinstalled")
-}
+  console.log('\n\nRoles and database installed or reinstalled');
+};
 
-setupDB().catch(e => {
+setupDB().catch((e) => {
   console.error(e);
   process.exit(1);
 });
