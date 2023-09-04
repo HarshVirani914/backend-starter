@@ -1,60 +1,209 @@
-"""All input for the create `SubscriptionDetail` mutation."""
-input CreateSubscriptionDetailInput {
-  """
-  An arbitrary string value with no semantic meaning. Will be included in the
-  payload verbatim. May be used to track mutations by the client.
-  """
-  clientMutationId: String
+type Address {
+  address1: String
+  address2: String
+  contactNumber: String
+  createdAt: Datetime!
+  id: UUID!
+  isPrimary: Boolean!
+  updatedAt: Datetime!
 
-  """The `SubscriptionDetail` to be created by this mutation."""
-  subscriptionDetail: SubscriptionDetailInput!
-}
-
-"""The output of our create `SubscriptionDetail` mutation."""
-type CreateSubscriptionDetailPayload {
-  """
-  The exact same `clientMutationId` that was provided in the mutation input,
-  unchanged and unused. May be used by a client to track mutations.
-  """
-  clientMutationId: String
-
-  """
-  Our root query field type. Allows us to run any query from our mutation payload.
-  """
-  query: Query
-
-  """
-  Reads a single `Subscription` that is related to this `SubscriptionDetail`.
-  """
-  subscription: Subscription
-
-  """The `SubscriptionDetail` that was created by this mutation."""
-  subscriptionDetail: SubscriptionDetail
-
-  """An edge for our `SubscriptionDetail`. May be used by Relay 1."""
-  subscriptionDetailEdge(
-    """The method to use when ordering `SubscriptionDetail`."""
-    orderBy: [SubscriptionDetailsOrderBy!] = [PRIMARY_KEY_ASC]
-  ): SubscriptionDetailsEdge
-
-  """Reads a single `User` that is related to this `SubscriptionDetail`."""
+  """Reads a single `User` that is related to this `Address`."""
   user: User
+  userId: UUID!
 }
 
-"""All input for the create `Subscription` mutation."""
-input CreateSubscriptionInput {
+"""The fields on `address` to look up the row to connect."""
+input AddressAddressesPkeyConnect {
+  id: UUID!
+}
+
+"""The fields on `address` to look up the row to delete."""
+input AddressAddressesPkeyDelete {
+  id: UUID!
+}
+
+"""
+A condition to be used against `Address` object types. All fields are tested for equality and combined with a logical ‘and.’
+"""
+input AddressCondition {
+  """Checks for equality with the object’s `id` field."""
+  id: UUID
+
+  """Checks for equality with the object’s `userId` field."""
+  userId: UUID
+}
+
+"""An input for mutations affecting `Address`"""
+input AddressInput {
+  address1: String
+  address2: String
+  contactNumber: String
+  createdAt: Datetime
+  id: UUID
+  isPrimary: Boolean
+  updatedAt: Datetime
+  userId: UUID
+  userToUserId: AddressesUserIdFkeyInput
+}
+
+"""The fields on `address` to look up the row to update."""
+input AddressOnAddressForAddressesUserIdFkeyUsingAddressesPkeyUpdate {
+  id: UUID!
+
+  """
+  An object where the defined keys will be set on the `address` being updated.
+  """
+  patch: updateAddressOnAddressForAddressesUserIdFkeyPatch!
+}
+
+"""
+Represents an update to a `Address`. Fields that are set will be updated.
+"""
+input AddressPatch {
+  address1: String
+  address2: String
+  contactNumber: String
+  createdAt: Datetime
+  id: UUID
+  isPrimary: Boolean
+  updatedAt: Datetime
+  userId: UUID
+  userToUserId: AddressesUserIdFkeyInput
+}
+
+"""A connection to a list of `Address` values."""
+type AddressesConnection {
+  """
+  A list of edges which contains the `Address` and cursor to aid in pagination.
+  """
+  edges: [AddressesEdge!]!
+
+  """A list of `Address` objects."""
+  nodes: [Address!]!
+
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """The count of *all* `Address` you could get from the connection."""
+  totalCount: Int!
+}
+
+"""A `Address` edge in the connection."""
+type AddressesEdge {
+  """A cursor for use in pagination."""
+  cursor: Cursor
+
+  """The `Address` at the end of the edge."""
+  node: Address!
+}
+
+"""Methods to use when ordering `Address`."""
+enum AddressesOrderBy {
+  ID_ASC
+  ID_DESC
+  NATURAL
+  PRIMARY_KEY_ASC
+  PRIMARY_KEY_DESC
+  USER_ID_ASC
+  USER_ID_DESC
+}
+
+"""The `address` to be created by this mutation."""
+input AddressesUserIdFkeyAddressesCreateInput {
+  address1: String
+  address2: String
+  contactNumber: String
+  createdAt: Datetime
+  id: UUID
+  isPrimary: Boolean
+  updatedAt: Datetime
+  userToUserId: AddressesUserIdFkeyInput
+}
+
+"""
+Input for the nested mutation of `user` in the `AddressInput` mutation.
+"""
+input AddressesUserIdFkeyInput {
+  """The primary key(s) for `user` for the far side of the relationship."""
+  connectById: UserUsersPkeyConnect
+
+  """
+  A `UserInput` object that will be created and connected to this object.
+  """
+  create: AddressesUserIdFkeyUsersCreateInput
+
+  """The primary key(s) for `user` for the far side of the relationship."""
+  deleteById: UserUsersPkeyDelete
+
+  """
+  The primary key(s) and patch data for `user` for the far side of the relationship.
+  """
+  updateById: UserOnAddressForAddressesUserIdFkeyUsingUsersPkeyUpdate
+}
+
+"""
+Input for the nested mutation of `address` in the `UserInput` mutation.
+"""
+input AddressesUserIdFkeyInverseInput {
+  """The primary key(s) for `address` for the far side of the relationship."""
+  connectById: [AddressAddressesPkeyConnect!]
+
+  """
+  A `AddressInput` object that will be created and connected to this object.
+  """
+  create: [AddressesUserIdFkeyAddressesCreateInput!]
+
+  """The primary key(s) for `address` for the far side of the relationship."""
+  deleteById: [AddressAddressesPkeyDelete!]
+
+  """
+  Flag indicating whether all other `address` records that match this relationship should be removed.
+  """
+  deleteOthers: Boolean
+
+  """
+  The primary key(s) and patch data for `address` for the far side of the relationship.
+  """
+  updateById: [AddressOnAddressForAddressesUserIdFkeyUsingAddressesPkeyUpdate!]
+}
+
+"""The `user` to be created by this mutation."""
+input AddressesUserIdFkeyUsersCreateInput {
+  addressesUsingId: AddressesUserIdFkeyInverseInput
+  createdAt: Datetime
+  email: String!
+  id: UUID
+  isAdmin: Boolean
+  isVerified: Boolean
+  name: String
+  password: String
+  type: String
+  updatedAt: Datetime
+}
+
+"""All input for the create `Address` mutation."""
+input CreateAddressInput {
+  """The `Address` to be created by this mutation."""
+  address: AddressInput!
+
   """
   An arbitrary string value with no semantic meaning. Will be included in the
   payload verbatim. May be used to track mutations by the client.
   """
   clientMutationId: String
-
-  """The `Subscription` to be created by this mutation."""
-  subscription: SubscriptionInput!
 }
 
-"""The output of our create `Subscription` mutation."""
-type CreateSubscriptionPayload {
+"""The output of our create `Address` mutation."""
+type CreateAddressPayload {
+  """The `Address` that was created by this mutation."""
+  address: Address
+
+  """An edge for our `Address`. May be used by Relay 1."""
+  addressEdge(
+    """The method to use when ordering `Address`."""
+    orderBy: [AddressesOrderBy!] = [PRIMARY_KEY_ASC]
+  ): AddressesEdge
+
   """
   The exact same `clientMutationId` that was provided in the mutation input,
   unchanged and unused. May be used by a client to track mutations.
@@ -66,16 +215,7 @@ type CreateSubscriptionPayload {
   """
   query: Query
 
-  """The `Subscription` that was created by this mutation."""
-  subscription: Subscription
-
-  """An edge for our `Subscription`. May be used by Relay 1."""
-  subscriptionEdge(
-    """The method to use when ordering `Subscription`."""
-    orderBy: [SubscriptionsOrderBy!] = [PRIMARY_KEY_ASC]
-  ): SubscriptionsEdge
-
-  """Reads a single `User` that is related to this `Subscription`."""
+  """Reads a single `User` that is related to this `Address`."""
   user: User
 }
 
@@ -117,27 +257,14 @@ type CreateUserPayload {
 """A location in a connection that can be used for resuming pagination."""
 scalar Cursor
 
-"""The day, does not include a time."""
-scalar Date
-
 """
 A point in time as described by the [ISO
 8601](https://en.wikipedia.org/wiki/ISO_8601) standard. May or may not include a timezone.
 """
 scalar Datetime
 
-"""All input for the `deleteSubscriptionByName` mutation."""
-input DeleteSubscriptionByNameInput {
-  """
-  An arbitrary string value with no semantic meaning. Will be included in the
-  payload verbatim. May be used to track mutations by the client.
-  """
-  clientMutationId: String
-  name: String!
-}
-
-"""All input for the `deleteSubscriptionDetail` mutation."""
-input DeleteSubscriptionDetailInput {
+"""All input for the `deleteAddress` mutation."""
+input DeleteAddressInput {
   """
   An arbitrary string value with no semantic meaning. Will be included in the
   payload verbatim. May be used to track mutations by the client.
@@ -146,83 +273,31 @@ input DeleteSubscriptionDetailInput {
   id: UUID!
 }
 
-"""The output of our delete `SubscriptionDetail` mutation."""
-type DeleteSubscriptionDetailPayload {
+"""The output of our delete `Address` mutation."""
+type DeleteAddressPayload {
+  """The `Address` that was deleted by this mutation."""
+  address: Address
+
+  """An edge for our `Address`. May be used by Relay 1."""
+  addressEdge(
+    """The method to use when ordering `Address`."""
+    orderBy: [AddressesOrderBy!] = [PRIMARY_KEY_ASC]
+  ): AddressesEdge
+
   """
   The exact same `clientMutationId` that was provided in the mutation input,
   unchanged and unused. May be used by a client to track mutations.
   """
   clientMutationId: String
-  deletedSubscriptionDetailNodeId: ID
+  deletedAddressNodeId: ID
 
   """
   Our root query field type. Allows us to run any query from our mutation payload.
   """
   query: Query
 
-  """
-  Reads a single `Subscription` that is related to this `SubscriptionDetail`.
-  """
-  subscription: Subscription
-
-  """The `SubscriptionDetail` that was deleted by this mutation."""
-  subscriptionDetail: SubscriptionDetail
-
-  """An edge for our `SubscriptionDetail`. May be used by Relay 1."""
-  subscriptionDetailEdge(
-    """The method to use when ordering `SubscriptionDetail`."""
-    orderBy: [SubscriptionDetailsOrderBy!] = [PRIMARY_KEY_ASC]
-  ): SubscriptionDetailsEdge
-
-  """Reads a single `User` that is related to this `SubscriptionDetail`."""
+  """Reads a single `User` that is related to this `Address`."""
   user: User
-}
-
-"""All input for the `deleteSubscription` mutation."""
-input DeleteSubscriptionInput {
-  """
-  An arbitrary string value with no semantic meaning. Will be included in the
-  payload verbatim. May be used to track mutations by the client.
-  """
-  clientMutationId: String
-  id: UUID!
-}
-
-"""The output of our delete `Subscription` mutation."""
-type DeleteSubscriptionPayload {
-  """
-  The exact same `clientMutationId` that was provided in the mutation input,
-  unchanged and unused. May be used by a client to track mutations.
-  """
-  clientMutationId: String
-  deletedSubscriptionNodeId: ID
-
-  """
-  Our root query field type. Allows us to run any query from our mutation payload.
-  """
-  query: Query
-
-  """The `Subscription` that was deleted by this mutation."""
-  subscription: Subscription
-
-  """An edge for our `Subscription`. May be used by Relay 1."""
-  subscriptionEdge(
-    """The method to use when ordering `Subscription`."""
-    orderBy: [SubscriptionsOrderBy!] = [PRIMARY_KEY_ASC]
-  ): SubscriptionsEdge
-
-  """Reads a single `User` that is related to this `Subscription`."""
-  user: User
-}
-
-"""All input for the `deleteUserByEmail` mutation."""
-input DeleteUserByEmailInput {
-  """
-  An arbitrary string value with no semantic meaning. Will be included in the
-  payload verbatim. May be used to track mutations by the client.
-  """
-  clientMutationId: String
-  email: String!
 }
 
 """All input for the `deleteUser` mutation."""
@@ -277,21 +352,13 @@ type LogoutPayload {
 The root mutation type which contains root level fields which mutate data.
 """
 type Mutation {
-  """Creates a single `Subscription`."""
-  createSubscription(
+  """Creates a single `Address`."""
+  createAddress(
     """
     The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
     """
-    input: CreateSubscriptionInput!
-  ): CreateSubscriptionPayload
-
-  """Creates a single `SubscriptionDetail`."""
-  createSubscriptionDetail(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: CreateSubscriptionDetailInput!
-  ): CreateSubscriptionDetailPayload
+    input: CreateAddressInput!
+  ): CreateAddressPayload
 
   """Creates a single `User`."""
   createUser(
@@ -301,29 +368,13 @@ type Mutation {
     input: CreateUserInput!
   ): CreateUserPayload
 
-  """Deletes a single `Subscription` using a unique key."""
-  deleteSubscription(
+  """Deletes a single `Address` using a unique key."""
+  deleteAddress(
     """
     The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
     """
-    input: DeleteSubscriptionInput!
-  ): DeleteSubscriptionPayload
-
-  """Deletes a single `Subscription` using a unique key."""
-  deleteSubscriptionByName(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: DeleteSubscriptionByNameInput!
-  ): DeleteSubscriptionPayload
-
-  """Deletes a single `SubscriptionDetail` using a unique key."""
-  deleteSubscriptionDetail(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: DeleteSubscriptionDetailInput!
-  ): DeleteSubscriptionDetailPayload
+    input: DeleteAddressInput!
+  ): DeleteAddressPayload
 
   """Deletes a single `User` using a unique key."""
   deleteUser(
@@ -331,14 +382,6 @@ type Mutation {
     The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
     """
     input: DeleteUserInput!
-  ): DeleteUserPayload
-
-  """Deletes a single `User` using a unique key."""
-  deleteUserByEmail(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: DeleteUserByEmailInput!
   ): DeleteUserPayload
 
   """
@@ -376,29 +419,13 @@ type Mutation {
     input: ResetPasswordInput!
   ): ResetPasswordPayload
 
-  """Updates a single `Subscription` using a unique key and a patch."""
-  updateSubscription(
+  """Updates a single `Address` using a unique key and a patch."""
+  updateAddress(
     """
     The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
     """
-    input: UpdateSubscriptionInput!
-  ): UpdateSubscriptionPayload
-
-  """Updates a single `Subscription` using a unique key and a patch."""
-  updateSubscriptionByName(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: UpdateSubscriptionByNameInput!
-  ): UpdateSubscriptionPayload
-
-  """Updates a single `SubscriptionDetail` using a unique key and a patch."""
-  updateSubscriptionDetail(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: UpdateSubscriptionDetailInput!
-  ): UpdateSubscriptionDetailPayload
+    input: UpdateAddressInput!
+  ): UpdateAddressPayload
 
   """Updates a single `User` using a unique key and a patch."""
   updateUser(
@@ -406,14 +433,6 @@ type Mutation {
     The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
     """
     input: UpdateUserInput!
-  ): UpdateUserPayload
-
-  """Updates a single `User` using a unique key and a patch."""
-  updateUserByEmail(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: UpdateUserByEmailInput!
   ): UpdateUserPayload
 }
 
@@ -434,7 +453,38 @@ type PageInfo {
 
 """The root query type which gives access points into the data universe."""
 type Query {
+  address(id: UUID!): Address
+
+  """Reads and enables pagination through a set of `Address`."""
+  addresses(
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: AddressCondition
+
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """The method to use when ordering `Address`."""
+    orderBy: [AddressesOrderBy!] = [PRIMARY_KEY_ASC]
+  ): AddressesConnection
   currentSessionId: UUID
+  currentUser: User
   currentUserId: UUID
   currentUserIsAdmin: Boolean
 
@@ -443,69 +493,7 @@ type Query {
   which can only query top level fields if they are in a particular form.
   """
   query: Query!
-  subscription(id: UUID!): Subscription
-  subscriptionByName(name: String!): Subscription
-  subscriptionDetail(id: UUID!): SubscriptionDetail
-
-  """Reads and enables pagination through a set of `SubscriptionDetail`."""
-  subscriptionDetails(
-    """Read all values in the set after (below) this cursor."""
-    after: Cursor
-
-    """Read all values in the set before (above) this cursor."""
-    before: Cursor
-
-    """
-    A condition to be used in determining which values should be returned by the collection.
-    """
-    condition: SubscriptionDetailCondition
-
-    """Only read the first `n` values of the set."""
-    first: Int
-
-    """Only read the last `n` values of the set."""
-    last: Int
-
-    """
-    Skip the first `n` values from our `after` cursor, an alternative to cursor
-    based pagination. May not be used with `last`.
-    """
-    offset: Int
-
-    """The method to use when ordering `SubscriptionDetail`."""
-    orderBy: [SubscriptionDetailsOrderBy!] = [PRIMARY_KEY_ASC]
-  ): SubscriptionDetailsConnection
-
-  """Reads and enables pagination through a set of `Subscription`."""
-  subscriptions(
-    """Read all values in the set after (below) this cursor."""
-    after: Cursor
-
-    """Read all values in the set before (above) this cursor."""
-    before: Cursor
-
-    """
-    A condition to be used in determining which values should be returned by the collection.
-    """
-    condition: SubscriptionCondition
-
-    """Only read the first `n` values of the set."""
-    first: Int
-
-    """Only read the last `n` values of the set."""
-    last: Int
-
-    """
-    Skip the first `n` values from our `after` cursor, an alternative to cursor
-    based pagination. May not be used with `last`.
-    """
-    offset: Int
-
-    """The method to use when ordering `Subscription`."""
-    orderBy: [SubscriptionsOrderBy!] = [PRIMARY_KEY_ASC]
-  ): SubscriptionsConnection
   user(id: UUID!): User
-  userByEmail(email: String!): User
 
   """Reads and enables pagination through a set of `User`."""
   users(
@@ -575,729 +563,13 @@ type ResetPasswordPayload {
   success: Boolean
 }
 
-type Subscription {
-  createdAt: Datetime!
-  id: UUID!
-  name: String!
-
-  """Reads and enables pagination through a set of `SubscriptionDetail`."""
-  subscriptionDetails(
-    """Read all values in the set after (below) this cursor."""
-    after: Cursor
-
-    """Read all values in the set before (above) this cursor."""
-    before: Cursor
-
-    """
-    A condition to be used in determining which values should be returned by the collection.
-    """
-    condition: SubscriptionDetailCondition
-
-    """Only read the first `n` values of the set."""
-    first: Int
-
-    """Only read the last `n` values of the set."""
-    last: Int
-
-    """
-    Skip the first `n` values from our `after` cursor, an alternative to cursor
-    based pagination. May not be used with `last`.
-    """
-    offset: Int
-
-    """The method to use when ordering `SubscriptionDetail`."""
-    orderBy: [SubscriptionDetailsOrderBy!] = [PRIMARY_KEY_ASC]
-  ): SubscriptionDetailsConnection!
-  updatedAt: Datetime!
-
-  """Reads a single `User` that is related to this `Subscription`."""
-  user: User
-  userId: UUID
-
-  """Reads and enables pagination through a set of `User`."""
-  usersBySubscriptionDetailSubscriptionIdAndUserId(
-    """Read all values in the set after (below) this cursor."""
-    after: Cursor
-
-    """Read all values in the set before (above) this cursor."""
-    before: Cursor
-
-    """
-    A condition to be used in determining which values should be returned by the collection.
-    """
-    condition: UserCondition
-
-    """Only read the first `n` values of the set."""
-    first: Int
-
-    """Only read the last `n` values of the set."""
-    last: Int
-
-    """
-    Skip the first `n` values from our `after` cursor, an alternative to cursor
-    based pagination. May not be used with `last`.
-    """
-    offset: Int
-
-    """The method to use when ordering `User`."""
-    orderBy: [UsersOrderBy!] = [PRIMARY_KEY_ASC]
-  ): SubscriptionUsersBySubscriptionDetailSubscriptionIdAndUserIdManyToManyConnection!
-}
-
-"""
-A condition to be used against `Subscription` object types. All fields are
-tested for equality and combined with a logical ‘and.’
-"""
-input SubscriptionCondition {
-  """Checks for equality with the object’s `id` field."""
-  id: UUID
-
-  """Checks for equality with the object’s `name` field."""
-  name: String
-
-  """Checks for equality with the object’s `userId` field."""
-  userId: UUID
-}
-
-type SubscriptionDetail {
-  createdAt: Datetime!
-  date: Date!
-  endTime: Time!
-  id: UUID!
-  startTime: Time!
-
-  """
-  Reads a single `Subscription` that is related to this `SubscriptionDetail`.
-  """
-  subscription: Subscription
-  subscriptionId: UUID!
-  updatedAt: Datetime!
-
-  """Reads a single `User` that is related to this `SubscriptionDetail`."""
-  user: User
-  userId: UUID
-}
-
-"""
-A condition to be used against `SubscriptionDetail` object types. All fields are
-tested for equality and combined with a logical ‘and.’
-"""
-input SubscriptionDetailCondition {
-  """Checks for equality with the object’s `date` field."""
-  date: Date
-
-  """Checks for equality with the object’s `endTime` field."""
-  endTime: Time
-
-  """Checks for equality with the object’s `id` field."""
-  id: UUID
-
-  """Checks for equality with the object’s `startTime` field."""
-  startTime: Time
-
-  """Checks for equality with the object’s `subscriptionId` field."""
-  subscriptionId: UUID
-
-  """Checks for equality with the object’s `userId` field."""
-  userId: UUID
-}
-
-"""An input for mutations affecting `SubscriptionDetail`"""
-input SubscriptionDetailInput {
-  createdAt: Datetime
-  date: Date!
-  endTime: Time!
-  id: UUID
-  startTime: Time!
-  subscriptionId: UUID
-  subscriptionToSubscriptionId: SubscriptionDetailsSubscriptionIdFkeyInput
-  updatedAt: Datetime
-  userId: UUID
-  userToUserId: SubscriptionDetailsUserIdFkeyInput
-}
-
-"""The fields on `subscriptionDetail` to look up the row to update."""
-input SubscriptionDetailOnSubscriptionDetailForSubscriptionDetailsSubscriptionIdFkeyUsingSubscriptionDetailsPkeyUpdate {
-  id: UUID!
-
-  """
-  An object where the defined keys will be set on the `subscriptionDetail` being updated.
-  """
-  patch: updateSubscriptionDetailOnSubscriptionDetailForSubscriptionDetailsSubscriptionIdFkeyPatch!
-}
-
-"""The fields on `subscriptionDetail` to look up the row to update."""
-input SubscriptionDetailOnSubscriptionDetailForSubscriptionDetailsUserIdFkeyUsingSubscriptionDetailsPkeyUpdate {
-  id: UUID!
-
-  """
-  An object where the defined keys will be set on the `subscriptionDetail` being updated.
-  """
-  patch: updateSubscriptionDetailOnSubscriptionDetailForSubscriptionDetailsUserIdFkeyPatch!
-}
-
-"""
-Represents an update to a `SubscriptionDetail`. Fields that are set will be updated.
-"""
-input SubscriptionDetailPatch {
-  createdAt: Datetime
-  date: Date
-  endTime: Time
-  id: UUID
-  startTime: Time
-  subscriptionId: UUID
-  subscriptionToSubscriptionId: SubscriptionDetailsSubscriptionIdFkeyInput
-  updatedAt: Datetime
-  userId: UUID
-  userToUserId: SubscriptionDetailsUserIdFkeyInput
-}
-
-"""The fields on `subscriptionDetail` to look up the row to connect."""
-input SubscriptionDetailSubscriptionDetailsPkeyConnect {
-  id: UUID!
-}
-
-"""The fields on `subscriptionDetail` to look up the row to delete."""
-input SubscriptionDetailSubscriptionDetailsPkeyDelete {
-  id: UUID!
-}
-
-"""A connection to a list of `SubscriptionDetail` values."""
-type SubscriptionDetailsConnection {
-  """
-  A list of edges which contains the `SubscriptionDetail` and cursor to aid in pagination.
-  """
-  edges: [SubscriptionDetailsEdge!]!
-
-  """A list of `SubscriptionDetail` objects."""
-  nodes: [SubscriptionDetail!]!
-
-  """Information to aid in pagination."""
-  pageInfo: PageInfo!
-
-  """
-  The count of *all* `SubscriptionDetail` you could get from the connection.
-  """
-  totalCount: Int!
-}
-
-"""A `SubscriptionDetail` edge in the connection."""
-type SubscriptionDetailsEdge {
-  """A cursor for use in pagination."""
-  cursor: Cursor
-
-  """The `SubscriptionDetail` at the end of the edge."""
-  node: SubscriptionDetail!
-}
-
-"""Methods to use when ordering `SubscriptionDetail`."""
-enum SubscriptionDetailsOrderBy {
-  DATE_ASC
-  DATE_DESC
-  END_TIME_ASC
-  END_TIME_DESC
-  ID_ASC
-  ID_DESC
-  NATURAL
-  PRIMARY_KEY_ASC
-  PRIMARY_KEY_DESC
-  START_TIME_ASC
-  START_TIME_DESC
-  SUBSCRIPTION_ID_ASC
-  SUBSCRIPTION_ID_DESC
-  USER_ID_ASC
-  USER_ID_DESC
-}
-
-"""
-Input for the nested mutation of `subscription` in the `SubscriptionDetailInput` mutation.
-"""
-input SubscriptionDetailsSubscriptionIdFkeyInput {
-  """
-  The primary key(s) for `subscription` for the far side of the relationship.
-  """
-  connectById: SubscriptionSubscriptionsPkeyConnect
-
-  """
-  The primary key(s) for `subscription` for the far side of the relationship.
-  """
-  connectByName: SubscriptionSubscriptionsNameKeyConnect
-
-  """
-  A `SubscriptionInput` object that will be created and connected to this object.
-  """
-  create: SubscriptionDetailsSubscriptionIdFkeySubscriptionsCreateInput
-
-  """
-  The primary key(s) for `subscription` for the far side of the relationship.
-  """
-  deleteById: SubscriptionSubscriptionsPkeyDelete
-
-  """
-  The primary key(s) for `subscription` for the far side of the relationship.
-  """
-  deleteByName: SubscriptionSubscriptionsNameKeyDelete
-
-  """
-  The primary key(s) and patch data for `subscription` for the far side of the relationship.
-  """
-  updateById: SubscriptionOnSubscriptionDetailForSubscriptionDetailsSubscriptionIdFkeyUsingSubscriptionsPkeyUpdate
-
-  """
-  The primary key(s) and patch data for `subscription` for the far side of the relationship.
-  """
-  updateByName: SubscriptionOnSubscriptionDetailForSubscriptionDetailsSubscriptionIdFkeyUsingSubscriptionsNameKeyUpdate
-}
-
-"""
-Input for the nested mutation of `subscriptionDetail` in the `SubscriptionInput` mutation.
-"""
-input SubscriptionDetailsSubscriptionIdFkeyInverseInput {
-  """
-  The primary key(s) for `subscriptionDetail` for the far side of the relationship.
-  """
-  connectById: [SubscriptionDetailSubscriptionDetailsPkeyConnect!]
-
-  """
-  A `SubscriptionDetailInput` object that will be created and connected to this object.
-  """
-  create: [SubscriptionDetailsSubscriptionIdFkeySubscriptionDetailsCreateInput!]
-
-  """
-  The primary key(s) for `subscriptionDetail` for the far side of the relationship.
-  """
-  deleteById: [SubscriptionDetailSubscriptionDetailsPkeyDelete!]
-
-  """
-  Flag indicating whether all other `subscriptionDetail` records that match this relationship should be removed.
-  """
-  deleteOthers: Boolean
-
-  """
-  The primary key(s) and patch data for `subscriptionDetail` for the far side of the relationship.
-  """
-  updateById: [SubscriptionDetailOnSubscriptionDetailForSubscriptionDetailsSubscriptionIdFkeyUsingSubscriptionDetailsPkeyUpdate!]
-}
-
-"""The `subscriptionDetail` to be created by this mutation."""
-input SubscriptionDetailsSubscriptionIdFkeySubscriptionDetailsCreateInput {
-  createdAt: Datetime
-  date: Date!
-  endTime: Time!
-  id: UUID
-  startTime: Time!
-  subscriptionToSubscriptionId: SubscriptionDetailsSubscriptionIdFkeyInput
-  updatedAt: Datetime
-  userId: UUID
-  userToUserId: SubscriptionDetailsUserIdFkeyInput
-}
-
-"""The `subscription` to be created by this mutation."""
-input SubscriptionDetailsSubscriptionIdFkeySubscriptionsCreateInput {
-  createdAt: Datetime
-  id: UUID
-  name: String!
-  subscriptionDetailsUsingId: SubscriptionDetailsSubscriptionIdFkeyInverseInput
-  updatedAt: Datetime
-  userId: UUID
-  userToUserId: SubscriptionsUserIdFkeyInput
-}
-
-"""
-Input for the nested mutation of `user` in the `SubscriptionDetailInput` mutation.
-"""
-input SubscriptionDetailsUserIdFkeyInput {
-  """The primary key(s) for `user` for the far side of the relationship."""
-  connectByEmail: UserUsersEmailKeyConnect
-
-  """The primary key(s) for `user` for the far side of the relationship."""
-  connectById: UserUsersPkeyConnect
-
-  """
-  A `UserInput` object that will be created and connected to this object.
-  """
-  create: SubscriptionDetailsUserIdFkeyUsersCreateInput
-
-  """The primary key(s) for `user` for the far side of the relationship."""
-  deleteByEmail: UserUsersEmailKeyDelete
-
-  """The primary key(s) for `user` for the far side of the relationship."""
-  deleteById: UserUsersPkeyDelete
-
-  """
-  The primary key(s) and patch data for `user` for the far side of the relationship.
-  """
-  updateByEmail: UserOnSubscriptionDetailForSubscriptionDetailsUserIdFkeyUsingUsersEmailKeyUpdate
-
-  """
-  The primary key(s) and patch data for `user` for the far side of the relationship.
-  """
-  updateById: UserOnSubscriptionDetailForSubscriptionDetailsUserIdFkeyUsingUsersPkeyUpdate
-}
-
-"""
-Input for the nested mutation of `subscriptionDetail` in the `UserInput` mutation.
-"""
-input SubscriptionDetailsUserIdFkeyInverseInput {
-  """
-  The primary key(s) for `subscriptionDetail` for the far side of the relationship.
-  """
-  connectById: [SubscriptionDetailSubscriptionDetailsPkeyConnect!]
-
-  """
-  A `SubscriptionDetailInput` object that will be created and connected to this object.
-  """
-  create: [SubscriptionDetailsUserIdFkeySubscriptionDetailsCreateInput!]
-
-  """
-  The primary key(s) for `subscriptionDetail` for the far side of the relationship.
-  """
-  deleteById: [SubscriptionDetailSubscriptionDetailsPkeyDelete!]
-
-  """
-  Flag indicating whether all other `subscriptionDetail` records that match this relationship should be removed.
-  """
-  deleteOthers: Boolean
-
-  """
-  The primary key(s) and patch data for `subscriptionDetail` for the far side of the relationship.
-  """
-  updateById: [SubscriptionDetailOnSubscriptionDetailForSubscriptionDetailsUserIdFkeyUsingSubscriptionDetailsPkeyUpdate!]
-}
-
-"""The `subscriptionDetail` to be created by this mutation."""
-input SubscriptionDetailsUserIdFkeySubscriptionDetailsCreateInput {
-  createdAt: Datetime
-  date: Date!
-  endTime: Time!
-  id: UUID
-  startTime: Time!
-  subscriptionId: UUID
-  subscriptionToSubscriptionId: SubscriptionDetailsSubscriptionIdFkeyInput
-  updatedAt: Datetime
-  userToUserId: SubscriptionDetailsUserIdFkeyInput
-}
-
-"""The `user` to be created by this mutation."""
-input SubscriptionDetailsUserIdFkeyUsersCreateInput {
-  createdAt: Datetime
-  email: String!
-  id: UUID
-  isAdmin: Boolean
-  name: String
-  password: String
-  subscriptionDetailsUsingId: SubscriptionDetailsUserIdFkeyInverseInput
-  subscriptionsUsingId: SubscriptionsUserIdFkeyInverseInput
-  updatedAt: Datetime
-}
-
-"""An input for mutations affecting `Subscription`"""
-input SubscriptionInput {
-  createdAt: Datetime
-  id: UUID
-  name: String!
-  subscriptionDetailsUsingId: SubscriptionDetailsSubscriptionIdFkeyInverseInput
-  updatedAt: Datetime
-  userId: UUID
-  userToUserId: SubscriptionsUserIdFkeyInput
-}
-
-"""The fields on `subscription` to look up the row to update."""
-input SubscriptionOnSubscriptionDetailForSubscriptionDetailsSubscriptionIdFkeyUsingSubscriptionsNameKeyUpdate {
-  name: String!
-
-  """
-  An object where the defined keys will be set on the `subscription` being updated.
-  """
-  patch: updateSubscriptionOnSubscriptionDetailForSubscriptionDetailsSubscriptionIdFkeyPatch!
-}
-
-"""The fields on `subscription` to look up the row to update."""
-input SubscriptionOnSubscriptionDetailForSubscriptionDetailsSubscriptionIdFkeyUsingSubscriptionsPkeyUpdate {
-  id: UUID!
-
-  """
-  An object where the defined keys will be set on the `subscription` being updated.
-  """
-  patch: updateSubscriptionOnSubscriptionDetailForSubscriptionDetailsSubscriptionIdFkeyPatch!
-}
-
-"""The fields on `subscription` to look up the row to update."""
-input SubscriptionOnSubscriptionForSubscriptionsUserIdFkeyUsingSubscriptionsNameKeyUpdate {
-  name: String!
-
-  """
-  An object where the defined keys will be set on the `subscription` being updated.
-  """
-  patch: updateSubscriptionOnSubscriptionForSubscriptionsUserIdFkeyPatch!
-}
-
-"""The fields on `subscription` to look up the row to update."""
-input SubscriptionOnSubscriptionForSubscriptionsUserIdFkeyUsingSubscriptionsPkeyUpdate {
-  id: UUID!
-
-  """
-  An object where the defined keys will be set on the `subscription` being updated.
-  """
-  patch: updateSubscriptionOnSubscriptionForSubscriptionsUserIdFkeyPatch!
-}
-
-"""
-Represents an update to a `Subscription`. Fields that are set will be updated.
-"""
-input SubscriptionPatch {
-  createdAt: Datetime
-  id: UUID
-  name: String
-  subscriptionDetailsUsingId: SubscriptionDetailsSubscriptionIdFkeyInverseInput
-  updatedAt: Datetime
-  userId: UUID
-  userToUserId: SubscriptionsUserIdFkeyInput
-}
-
-"""The fields on `subscription` to look up the row to connect."""
-input SubscriptionSubscriptionsNameKeyConnect {
-  name: String!
-}
-
-"""The fields on `subscription` to look up the row to delete."""
-input SubscriptionSubscriptionsNameKeyDelete {
-  name: String!
-}
-
-"""The fields on `subscription` to look up the row to connect."""
-input SubscriptionSubscriptionsPkeyConnect {
-  id: UUID!
-}
-
-"""The fields on `subscription` to look up the row to delete."""
-input SubscriptionSubscriptionsPkeyDelete {
-  id: UUID!
-}
-
-"""
-A connection to a list of `User` values, with data from `SubscriptionDetail`.
-"""
-type SubscriptionUsersBySubscriptionDetailSubscriptionIdAndUserIdManyToManyConnection {
-  """
-  A list of edges which contains the `User`, info from the `SubscriptionDetail`, and the cursor to aid in pagination.
-  """
-  edges: [SubscriptionUsersBySubscriptionDetailSubscriptionIdAndUserIdManyToManyEdge!]!
-
-  """A list of `User` objects."""
-  nodes: [User!]!
-
-  """Information to aid in pagination."""
-  pageInfo: PageInfo!
-
-  """The count of *all* `User` you could get from the connection."""
-  totalCount: Int!
-}
-
-"""A `User` edge in the connection, with data from `SubscriptionDetail`."""
-type SubscriptionUsersBySubscriptionDetailSubscriptionIdAndUserIdManyToManyEdge {
-  """A cursor for use in pagination."""
-  cursor: Cursor
-
-  """The `User` at the end of the edge."""
-  node: User!
-
-  """Reads and enables pagination through a set of `SubscriptionDetail`."""
-  subscriptionDetails(
-    """Read all values in the set after (below) this cursor."""
-    after: Cursor
-
-    """Read all values in the set before (above) this cursor."""
-    before: Cursor
-
-    """
-    A condition to be used in determining which values should be returned by the collection.
-    """
-    condition: SubscriptionDetailCondition
-
-    """Only read the first `n` values of the set."""
-    first: Int
-
-    """Only read the last `n` values of the set."""
-    last: Int
-
-    """
-    Skip the first `n` values from our `after` cursor, an alternative to cursor
-    based pagination. May not be used with `last`.
-    """
-    offset: Int
-
-    """The method to use when ordering `SubscriptionDetail`."""
-    orderBy: [SubscriptionDetailsOrderBy!] = [PRIMARY_KEY_ASC]
-  ): SubscriptionDetailsConnection!
-}
-
-"""A connection to a list of `Subscription` values."""
-type SubscriptionsConnection {
-  """
-  A list of edges which contains the `Subscription` and cursor to aid in pagination.
-  """
-  edges: [SubscriptionsEdge!]!
-
-  """A list of `Subscription` objects."""
-  nodes: [Subscription!]!
-
-  """Information to aid in pagination."""
-  pageInfo: PageInfo!
-
-  """The count of *all* `Subscription` you could get from the connection."""
-  totalCount: Int!
-}
-
-"""A `Subscription` edge in the connection."""
-type SubscriptionsEdge {
-  """A cursor for use in pagination."""
-  cursor: Cursor
-
-  """The `Subscription` at the end of the edge."""
-  node: Subscription!
-}
-
-"""Methods to use when ordering `Subscription`."""
-enum SubscriptionsOrderBy {
-  ID_ASC
-  ID_DESC
-  NAME_ASC
-  NAME_DESC
-  NATURAL
-  PRIMARY_KEY_ASC
-  PRIMARY_KEY_DESC
-  USER_ID_ASC
-  USER_ID_DESC
-}
-
-"""
-Input for the nested mutation of `user` in the `SubscriptionInput` mutation.
-"""
-input SubscriptionsUserIdFkeyInput {
-  """The primary key(s) for `user` for the far side of the relationship."""
-  connectByEmail: UserUsersEmailKeyConnect
-
-  """The primary key(s) for `user` for the far side of the relationship."""
-  connectById: UserUsersPkeyConnect
-
-  """
-  A `UserInput` object that will be created and connected to this object.
-  """
-  create: SubscriptionsUserIdFkeyUsersCreateInput
-
-  """The primary key(s) for `user` for the far side of the relationship."""
-  deleteByEmail: UserUsersEmailKeyDelete
-
-  """The primary key(s) for `user` for the far side of the relationship."""
-  deleteById: UserUsersPkeyDelete
-
-  """
-  The primary key(s) and patch data for `user` for the far side of the relationship.
-  """
-  updateByEmail: UserOnSubscriptionForSubscriptionsUserIdFkeyUsingUsersEmailKeyUpdate
-
-  """
-  The primary key(s) and patch data for `user` for the far side of the relationship.
-  """
-  updateById: UserOnSubscriptionForSubscriptionsUserIdFkeyUsingUsersPkeyUpdate
-}
-
-"""
-Input for the nested mutation of `subscription` in the `UserInput` mutation.
-"""
-input SubscriptionsUserIdFkeyInverseInput {
-  """
-  The primary key(s) for `subscription` for the far side of the relationship.
-  """
-  connectById: [SubscriptionSubscriptionsPkeyConnect!]
-
-  """
-  The primary key(s) for `subscription` for the far side of the relationship.
-  """
-  connectByName: [SubscriptionSubscriptionsNameKeyConnect!]
-
-  """
-  A `SubscriptionInput` object that will be created and connected to this object.
-  """
-  create: [SubscriptionsUserIdFkeySubscriptionsCreateInput!]
-
-  """
-  The primary key(s) for `subscription` for the far side of the relationship.
-  """
-  deleteById: [SubscriptionSubscriptionsPkeyDelete!]
-
-  """
-  The primary key(s) for `subscription` for the far side of the relationship.
-  """
-  deleteByName: [SubscriptionSubscriptionsNameKeyDelete!]
-
-  """
-  Flag indicating whether all other `subscription` records that match this relationship should be removed.
-  """
-  deleteOthers: Boolean
-
-  """
-  The primary key(s) and patch data for `subscription` for the far side of the relationship.
-  """
-  updateById: [SubscriptionOnSubscriptionForSubscriptionsUserIdFkeyUsingSubscriptionsPkeyUpdate!]
-
-  """
-  The primary key(s) and patch data for `subscription` for the far side of the relationship.
-  """
-  updateByName: [SubscriptionOnSubscriptionForSubscriptionsUserIdFkeyUsingSubscriptionsNameKeyUpdate!]
-}
-
-"""The `subscription` to be created by this mutation."""
-input SubscriptionsUserIdFkeySubscriptionsCreateInput {
-  createdAt: Datetime
-  id: UUID
-  name: String!
-  subscriptionDetailsUsingId: SubscriptionDetailsSubscriptionIdFkeyInverseInput
-  updatedAt: Datetime
-  userToUserId: SubscriptionsUserIdFkeyInput
-}
-
-"""The `user` to be created by this mutation."""
-input SubscriptionsUserIdFkeyUsersCreateInput {
-  createdAt: Datetime
-  email: String!
-  id: UUID
-  isAdmin: Boolean
-  name: String
-  password: String
-  subscriptionDetailsUsingId: SubscriptionDetailsUserIdFkeyInverseInput
-  subscriptionsUsingId: SubscriptionsUserIdFkeyInverseInput
-  updatedAt: Datetime
-}
-
-"""
-The exact time of day, does not include the date. May or may not have a timezone offset.
-"""
-scalar Time
-
 """
 A universally unique identifier as defined by [RFC 4122](https://tools.ietf.org/html/rfc4122).
 """
 scalar UUID
 
-"""All input for the `updateSubscriptionByName` mutation."""
-input UpdateSubscriptionByNameInput {
-  """
-  An arbitrary string value with no semantic meaning. Will be included in the
-  payload verbatim. May be used to track mutations by the client.
-  """
-  clientMutationId: String
-  name: String!
-
-  """
-  An object where the defined keys will be set on the `Subscription` being updated.
-  """
-  patch: SubscriptionPatch!
-}
-
-"""All input for the `updateSubscriptionDetail` mutation."""
-input UpdateSubscriptionDetailInput {
+"""All input for the `updateAddress` mutation."""
+input UpdateAddressInput {
   """
   An arbitrary string value with no semantic meaning. Will be included in the
   payload verbatim. May be used to track mutations by the client.
@@ -1306,13 +578,22 @@ input UpdateSubscriptionDetailInput {
   id: UUID!
 
   """
-  An object where the defined keys will be set on the `SubscriptionDetail` being updated.
+  An object where the defined keys will be set on the `Address` being updated.
   """
-  patch: SubscriptionDetailPatch!
+  patch: AddressPatch!
 }
 
-"""The output of our update `SubscriptionDetail` mutation."""
-type UpdateSubscriptionDetailPayload {
+"""The output of our update `Address` mutation."""
+type UpdateAddressPayload {
+  """The `Address` that was updated by this mutation."""
+  address: Address
+
+  """An edge for our `Address`. May be used by Relay 1."""
+  addressEdge(
+    """The method to use when ordering `Address`."""
+    orderBy: [AddressesOrderBy!] = [PRIMARY_KEY_ASC]
+  ): AddressesEdge
+
   """
   The exact same `clientMutationId` that was provided in the mutation input,
   unchanged and unused. May be used by a client to track mutations.
@@ -1324,78 +605,8 @@ type UpdateSubscriptionDetailPayload {
   """
   query: Query
 
-  """
-  Reads a single `Subscription` that is related to this `SubscriptionDetail`.
-  """
-  subscription: Subscription
-
-  """The `SubscriptionDetail` that was updated by this mutation."""
-  subscriptionDetail: SubscriptionDetail
-
-  """An edge for our `SubscriptionDetail`. May be used by Relay 1."""
-  subscriptionDetailEdge(
-    """The method to use when ordering `SubscriptionDetail`."""
-    orderBy: [SubscriptionDetailsOrderBy!] = [PRIMARY_KEY_ASC]
-  ): SubscriptionDetailsEdge
-
-  """Reads a single `User` that is related to this `SubscriptionDetail`."""
+  """Reads a single `User` that is related to this `Address`."""
   user: User
-}
-
-"""All input for the `updateSubscription` mutation."""
-input UpdateSubscriptionInput {
-  """
-  An arbitrary string value with no semantic meaning. Will be included in the
-  payload verbatim. May be used to track mutations by the client.
-  """
-  clientMutationId: String
-  id: UUID!
-
-  """
-  An object where the defined keys will be set on the `Subscription` being updated.
-  """
-  patch: SubscriptionPatch!
-}
-
-"""The output of our update `Subscription` mutation."""
-type UpdateSubscriptionPayload {
-  """
-  The exact same `clientMutationId` that was provided in the mutation input,
-  unchanged and unused. May be used by a client to track mutations.
-  """
-  clientMutationId: String
-
-  """
-  Our root query field type. Allows us to run any query from our mutation payload.
-  """
-  query: Query
-
-  """The `Subscription` that was updated by this mutation."""
-  subscription: Subscription
-
-  """An edge for our `Subscription`. May be used by Relay 1."""
-  subscriptionEdge(
-    """The method to use when ordering `Subscription`."""
-    orderBy: [SubscriptionsOrderBy!] = [PRIMARY_KEY_ASC]
-  ): SubscriptionsEdge
-
-  """Reads a single `User` that is related to this `Subscription`."""
-  user: User
-}
-
-"""All input for the `updateUserByEmail` mutation."""
-input UpdateUserByEmailInput {
-  """
-  An arbitrary string value with no semantic meaning. Will be included in the
-  payload verbatim. May be used to track mutations by the client.
-  """
-  clientMutationId: String
-  email: String!
-
-  """
-  An object where the defined keys will be set on the `User` being updated.
-  """
-  patch: UserPatch!
 }
 
 """All input for the `updateUser` mutation."""
@@ -1437,99 +648,42 @@ type UpdateUserPayload {
 }
 
 type User {
+  """Reads and enables pagination through a set of `Address`."""
+  addresses(
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: AddressCondition
+
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """The method to use when ordering `Address`."""
+    orderBy: [AddressesOrderBy!] = [PRIMARY_KEY_ASC]
+  ): AddressesConnection!
   createdAt: Datetime!
   email: String!
   id: UUID!
   isAdmin: Boolean!
+  isVerified: Boolean!
   name: String
   password: String
-
-  """Reads and enables pagination through a set of `SubscriptionDetail`."""
-  subscriptionDetails(
-    """Read all values in the set after (below) this cursor."""
-    after: Cursor
-
-    """Read all values in the set before (above) this cursor."""
-    before: Cursor
-
-    """
-    A condition to be used in determining which values should be returned by the collection.
-    """
-    condition: SubscriptionDetailCondition
-
-    """Only read the first `n` values of the set."""
-    first: Int
-
-    """Only read the last `n` values of the set."""
-    last: Int
-
-    """
-    Skip the first `n` values from our `after` cursor, an alternative to cursor
-    based pagination. May not be used with `last`.
-    """
-    offset: Int
-
-    """The method to use when ordering `SubscriptionDetail`."""
-    orderBy: [SubscriptionDetailsOrderBy!] = [PRIMARY_KEY_ASC]
-  ): SubscriptionDetailsConnection!
-
-  """Reads and enables pagination through a set of `Subscription`."""
-  subscriptions(
-    """Read all values in the set after (below) this cursor."""
-    after: Cursor
-
-    """Read all values in the set before (above) this cursor."""
-    before: Cursor
-
-    """
-    A condition to be used in determining which values should be returned by the collection.
-    """
-    condition: SubscriptionCondition
-
-    """Only read the first `n` values of the set."""
-    first: Int
-
-    """Only read the last `n` values of the set."""
-    last: Int
-
-    """
-    Skip the first `n` values from our `after` cursor, an alternative to cursor
-    based pagination. May not be used with `last`.
-    """
-    offset: Int
-
-    """The method to use when ordering `Subscription`."""
-    orderBy: [SubscriptionsOrderBy!] = [PRIMARY_KEY_ASC]
-  ): SubscriptionsConnection!
-
-  """Reads and enables pagination through a set of `Subscription`."""
-  subscriptionsBySubscriptionDetailUserIdAndSubscriptionId(
-    """Read all values in the set after (below) this cursor."""
-    after: Cursor
-
-    """Read all values in the set before (above) this cursor."""
-    before: Cursor
-
-    """
-    A condition to be used in determining which values should be returned by the collection.
-    """
-    condition: SubscriptionCondition
-
-    """Only read the first `n` values of the set."""
-    first: Int
-
-    """Only read the last `n` values of the set."""
-    last: Int
-
-    """
-    Skip the first `n` values from our `after` cursor, an alternative to cursor
-    based pagination. May not be used with `last`.
-    """
-    offset: Int
-
-    """The method to use when ordering `Subscription`."""
-    orderBy: [SubscriptionsOrderBy!] = [PRIMARY_KEY_ASC]
-  ): UserSubscriptionsBySubscriptionDetailUserIdAndSubscriptionIdManyToManyConnection!
+  type: String!
   updatedAt: Datetime!
 }
 
@@ -1542,144 +696,44 @@ input UserCondition {
 
   """Checks for equality with the object’s `id` field."""
   id: UUID
-
-  """Checks for equality with the object’s `password` field."""
-  password: String
 }
 
 """An input for mutations affecting `User`"""
 input UserInput {
+  addressesUsingId: AddressesUserIdFkeyInverseInput
   createdAt: Datetime
   email: String!
   id: UUID
   isAdmin: Boolean
+  isVerified: Boolean
   name: String
   password: String
-  subscriptionDetailsUsingId: SubscriptionDetailsUserIdFkeyInverseInput
-  subscriptionsUsingId: SubscriptionsUserIdFkeyInverseInput
+  type: String
   updatedAt: Datetime
 }
 
 """The fields on `user` to look up the row to update."""
-input UserOnSubscriptionDetailForSubscriptionDetailsUserIdFkeyUsingUsersEmailKeyUpdate {
-  email: String!
-
-  """
-  An object where the defined keys will be set on the `user` being updated.
-  """
-  patch: updateUserOnSubscriptionDetailForSubscriptionDetailsUserIdFkeyPatch!
-}
-
-"""The fields on `user` to look up the row to update."""
-input UserOnSubscriptionDetailForSubscriptionDetailsUserIdFkeyUsingUsersPkeyUpdate {
+input UserOnAddressForAddressesUserIdFkeyUsingUsersPkeyUpdate {
   id: UUID!
 
   """
   An object where the defined keys will be set on the `user` being updated.
   """
-  patch: updateUserOnSubscriptionDetailForSubscriptionDetailsUserIdFkeyPatch!
-}
-
-"""The fields on `user` to look up the row to update."""
-input UserOnSubscriptionForSubscriptionsUserIdFkeyUsingUsersEmailKeyUpdate {
-  email: String!
-
-  """
-  An object where the defined keys will be set on the `user` being updated.
-  """
-  patch: updateUserOnSubscriptionForSubscriptionsUserIdFkeyPatch!
-}
-
-"""The fields on `user` to look up the row to update."""
-input UserOnSubscriptionForSubscriptionsUserIdFkeyUsingUsersPkeyUpdate {
-  id: UUID!
-
-  """
-  An object where the defined keys will be set on the `user` being updated.
-  """
-  patch: updateUserOnSubscriptionForSubscriptionsUserIdFkeyPatch!
+  patch: updateUserOnAddressForAddressesUserIdFkeyPatch!
 }
 
 """Represents an update to a `User`. Fields that are set will be updated."""
 input UserPatch {
+  addressesUsingId: AddressesUserIdFkeyInverseInput
   createdAt: Datetime
   email: String
   id: UUID
   isAdmin: Boolean
+  isVerified: Boolean
   name: String
   password: String
-  subscriptionDetailsUsingId: SubscriptionDetailsUserIdFkeyInverseInput
-  subscriptionsUsingId: SubscriptionsUserIdFkeyInverseInput
+  type: String
   updatedAt: Datetime
-}
-
-"""
-A connection to a list of `Subscription` values, with data from `SubscriptionDetail`.
-"""
-type UserSubscriptionsBySubscriptionDetailUserIdAndSubscriptionIdManyToManyConnection {
-  """
-  A list of edges which contains the `Subscription`, info from the `SubscriptionDetail`, and the cursor to aid in pagination.
-  """
-  edges: [UserSubscriptionsBySubscriptionDetailUserIdAndSubscriptionIdManyToManyEdge!]!
-
-  """A list of `Subscription` objects."""
-  nodes: [Subscription!]!
-
-  """Information to aid in pagination."""
-  pageInfo: PageInfo!
-
-  """The count of *all* `Subscription` you could get from the connection."""
-  totalCount: Int!
-}
-
-"""
-A `Subscription` edge in the connection, with data from `SubscriptionDetail`.
-"""
-type UserSubscriptionsBySubscriptionDetailUserIdAndSubscriptionIdManyToManyEdge {
-  """A cursor for use in pagination."""
-  cursor: Cursor
-
-  """The `Subscription` at the end of the edge."""
-  node: Subscription!
-
-  """Reads and enables pagination through a set of `SubscriptionDetail`."""
-  subscriptionDetails(
-    """Read all values in the set after (below) this cursor."""
-    after: Cursor
-
-    """Read all values in the set before (above) this cursor."""
-    before: Cursor
-
-    """
-    A condition to be used in determining which values should be returned by the collection.
-    """
-    condition: SubscriptionDetailCondition
-
-    """Only read the first `n` values of the set."""
-    first: Int
-
-    """Only read the last `n` values of the set."""
-    last: Int
-
-    """
-    Skip the first `n` values from our `after` cursor, an alternative to cursor
-    based pagination. May not be used with `last`.
-    """
-    offset: Int
-
-    """The method to use when ordering `SubscriptionDetail`."""
-    orderBy: [SubscriptionDetailsOrderBy!] = [PRIMARY_KEY_ASC]
-  ): SubscriptionDetailsConnection!
-}
-
-"""The fields on `user` to look up the row to connect."""
-input UserUsersEmailKeyConnect {
-  email: String!
-}
-
-"""The fields on `user` to look up the row to delete."""
-input UserUsersEmailKeyDelete {
-  email: String!
 }
 
 """The fields on `user` to look up the row to connect."""
@@ -1725,93 +779,36 @@ enum UsersOrderBy {
   ID_ASC
   ID_DESC
   NATURAL
-  PASSWORD_ASC
-  PASSWORD_DESC
   PRIMARY_KEY_ASC
   PRIMARY_KEY_DESC
 }
 
 """
-An object where the defined keys will be set on the `subscriptionDetail` being updated.
+An object where the defined keys will be set on the `address` being updated.
 """
-input updateSubscriptionDetailOnSubscriptionDetailForSubscriptionDetailsSubscriptionIdFkeyPatch {
-  createdAt: Datetime
-  date: Date
-  endTime: Time
-  id: UUID
-  startTime: Time
-  subscriptionToSubscriptionId: SubscriptionDetailsSubscriptionIdFkeyInput
-  updatedAt: Datetime
-  userId: UUID
-  userToUserId: SubscriptionDetailsUserIdFkeyInput
-}
-
-"""
-An object where the defined keys will be set on the `subscriptionDetail` being updated.
-"""
-input updateSubscriptionDetailOnSubscriptionDetailForSubscriptionDetailsUserIdFkeyPatch {
-  createdAt: Datetime
-  date: Date
-  endTime: Time
-  id: UUID
-  startTime: Time
-  subscriptionId: UUID
-  subscriptionToSubscriptionId: SubscriptionDetailsSubscriptionIdFkeyInput
-  updatedAt: Datetime
-  userToUserId: SubscriptionDetailsUserIdFkeyInput
-}
-
-"""
-An object where the defined keys will be set on the `subscription` being updated.
-"""
-input updateSubscriptionOnSubscriptionDetailForSubscriptionDetailsSubscriptionIdFkeyPatch {
+input updateAddressOnAddressForAddressesUserIdFkeyPatch {
+  address1: String
+  address2: String
+  contactNumber: String
   createdAt: Datetime
   id: UUID
-  name: String
-  subscriptionDetailsUsingId: SubscriptionDetailsSubscriptionIdFkeyInverseInput
+  isPrimary: Boolean
   updatedAt: Datetime
-  userId: UUID
-  userToUserId: SubscriptionsUserIdFkeyInput
-}
-
-"""
-An object where the defined keys will be set on the `subscription` being updated.
-"""
-input updateSubscriptionOnSubscriptionForSubscriptionsUserIdFkeyPatch {
-  createdAt: Datetime
-  id: UUID
-  name: String
-  subscriptionDetailsUsingId: SubscriptionDetailsSubscriptionIdFkeyInverseInput
-  updatedAt: Datetime
-  userToUserId: SubscriptionsUserIdFkeyInput
+  userToUserId: AddressesUserIdFkeyInput
 }
 
 """
 An object where the defined keys will be set on the `user` being updated.
 """
-input updateUserOnSubscriptionDetailForSubscriptionDetailsUserIdFkeyPatch {
+input updateUserOnAddressForAddressesUserIdFkeyPatch {
+  addressesUsingId: AddressesUserIdFkeyInverseInput
   createdAt: Datetime
   email: String
   id: UUID
   isAdmin: Boolean
+  isVerified: Boolean
   name: String
   password: String
-  subscriptionDetailsUsingId: SubscriptionDetailsUserIdFkeyInverseInput
-  subscriptionsUsingId: SubscriptionsUserIdFkeyInverseInput
-  updatedAt: Datetime
-}
-
-"""
-An object where the defined keys will be set on the `user` being updated.
-"""
-input updateUserOnSubscriptionForSubscriptionsUserIdFkeyPatch {
-  createdAt: Datetime
-  email: String
-  id: UUID
-  isAdmin: Boolean
-  name: String
-  password: String
-  subscriptionDetailsUsingId: SubscriptionDetailsUserIdFkeyInverseInput
-  subscriptionsUsingId: SubscriptionsUserIdFkeyInverseInput
+  type: String
   updatedAt: Datetime
 }

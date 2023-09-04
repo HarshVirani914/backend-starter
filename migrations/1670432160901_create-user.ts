@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/naming-convention */
-import { MigrationBuilder, ColumnDefinitions } from 'node-pg-migrate';
+import { MigrationBuilder, ColumnDefinitions } from "node-pg-migrate";
 
 export const shorthands: ColumnDefinitions | undefined = undefined;
 
@@ -30,12 +30,13 @@ export async function up(pgm: MigrationBuilder): Promise<void> {
           (email, name, crypt(password, gen_salt('bf')))
           returning * into v_user;
     
-      -- refresh the user
+      
+      -- Refresh the user
       select * into v_user from app_public.users where id = v_user.id;
     
       return v_user;
     end;
-    $$ language plpgsql volatile security definer; 
+    $$ language plpgsql volatile set search_path to pg_catalog, public, pg_temp; 
 `);
 }
 
