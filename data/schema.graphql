@@ -1,224 +1,3 @@
-type Address {
-  address1: String
-  address2: String
-  contactNumber: String
-  createdAt: Datetime!
-  id: UUID!
-  isPrimary: Boolean!
-  updatedAt: Datetime!
-
-  """Reads a single `User` that is related to this `Address`."""
-  user: User
-  userId: UUID!
-}
-
-"""The fields on `address` to look up the row to connect."""
-input AddressAddressesPkeyConnect {
-  id: UUID!
-}
-
-"""The fields on `address` to look up the row to delete."""
-input AddressAddressesPkeyDelete {
-  id: UUID!
-}
-
-"""
-A condition to be used against `Address` object types. All fields are tested for equality and combined with a logical ‘and.’
-"""
-input AddressCondition {
-  """Checks for equality with the object’s `id` field."""
-  id: UUID
-
-  """Checks for equality with the object’s `userId` field."""
-  userId: UUID
-}
-
-"""An input for mutations affecting `Address`"""
-input AddressInput {
-  address1: String
-  address2: String
-  contactNumber: String
-  createdAt: Datetime
-  id: UUID
-  isPrimary: Boolean
-  updatedAt: Datetime
-  userId: UUID
-  userToUserId: AddressesUserIdFkeyInput
-}
-
-"""The fields on `address` to look up the row to update."""
-input AddressOnAddressForAddressesUserIdFkeyUsingAddressesPkeyUpdate {
-  id: UUID!
-
-  """
-  An object where the defined keys will be set on the `address` being updated.
-  """
-  patch: updateAddressOnAddressForAddressesUserIdFkeyPatch!
-}
-
-"""
-Represents an update to a `Address`. Fields that are set will be updated.
-"""
-input AddressPatch {
-  address1: String
-  address2: String
-  contactNumber: String
-  createdAt: Datetime
-  id: UUID
-  isPrimary: Boolean
-  updatedAt: Datetime
-  userId: UUID
-  userToUserId: AddressesUserIdFkeyInput
-}
-
-"""A connection to a list of `Address` values."""
-type AddressesConnection {
-  """
-  A list of edges which contains the `Address` and cursor to aid in pagination.
-  """
-  edges: [AddressesEdge!]!
-
-  """A list of `Address` objects."""
-  nodes: [Address!]!
-
-  """Information to aid in pagination."""
-  pageInfo: PageInfo!
-
-  """The count of *all* `Address` you could get from the connection."""
-  totalCount: Int!
-}
-
-"""A `Address` edge in the connection."""
-type AddressesEdge {
-  """A cursor for use in pagination."""
-  cursor: Cursor
-
-  """The `Address` at the end of the edge."""
-  node: Address!
-}
-
-"""Methods to use when ordering `Address`."""
-enum AddressesOrderBy {
-  ID_ASC
-  ID_DESC
-  NATURAL
-  PRIMARY_KEY_ASC
-  PRIMARY_KEY_DESC
-  USER_ID_ASC
-  USER_ID_DESC
-}
-
-"""The `address` to be created by this mutation."""
-input AddressesUserIdFkeyAddressesCreateInput {
-  address1: String
-  address2: String
-  contactNumber: String
-  createdAt: Datetime
-  id: UUID
-  isPrimary: Boolean
-  updatedAt: Datetime
-  userToUserId: AddressesUserIdFkeyInput
-}
-
-"""
-Input for the nested mutation of `user` in the `AddressInput` mutation.
-"""
-input AddressesUserIdFkeyInput {
-  """The primary key(s) for `user` for the far side of the relationship."""
-  connectById: UserUsersPkeyConnect
-
-  """
-  A `UserInput` object that will be created and connected to this object.
-  """
-  create: AddressesUserIdFkeyUsersCreateInput
-
-  """The primary key(s) for `user` for the far side of the relationship."""
-  deleteById: UserUsersPkeyDelete
-
-  """
-  The primary key(s) and patch data for `user` for the far side of the relationship.
-  """
-  updateById: UserOnAddressForAddressesUserIdFkeyUsingUsersPkeyUpdate
-}
-
-"""
-Input for the nested mutation of `address` in the `UserInput` mutation.
-"""
-input AddressesUserIdFkeyInverseInput {
-  """The primary key(s) for `address` for the far side of the relationship."""
-  connectById: [AddressAddressesPkeyConnect!]
-
-  """
-  A `AddressInput` object that will be created and connected to this object.
-  """
-  create: [AddressesUserIdFkeyAddressesCreateInput!]
-
-  """The primary key(s) for `address` for the far side of the relationship."""
-  deleteById: [AddressAddressesPkeyDelete!]
-
-  """
-  Flag indicating whether all other `address` records that match this relationship should be removed.
-  """
-  deleteOthers: Boolean
-
-  """
-  The primary key(s) and patch data for `address` for the far side of the relationship.
-  """
-  updateById: [AddressOnAddressForAddressesUserIdFkeyUsingAddressesPkeyUpdate!]
-}
-
-"""The `user` to be created by this mutation."""
-input AddressesUserIdFkeyUsersCreateInput {
-  addressesUsingId: AddressesUserIdFkeyInverseInput
-  createdAt: Datetime
-  email: String!
-  id: UUID
-  isAdmin: Boolean
-  isVerified: Boolean
-  name: String
-  password: String
-  type: String
-  updatedAt: Datetime
-}
-
-"""All input for the create `Address` mutation."""
-input CreateAddressInput {
-  """The `Address` to be created by this mutation."""
-  address: AddressInput!
-
-  """
-  An arbitrary string value with no semantic meaning. Will be included in the
-  payload verbatim. May be used to track mutations by the client.
-  """
-  clientMutationId: String
-}
-
-"""The output of our create `Address` mutation."""
-type CreateAddressPayload {
-  """The `Address` that was created by this mutation."""
-  address: Address
-
-  """An edge for our `Address`. May be used by Relay 1."""
-  addressEdge(
-    """The method to use when ordering `Address`."""
-    orderBy: [AddressesOrderBy!] = [PRIMARY_KEY_ASC]
-  ): AddressesEdge
-
-  """
-  The exact same `clientMutationId` that was provided in the mutation input,
-  unchanged and unused. May be used by a client to track mutations.
-  """
-  clientMutationId: String
-
-  """
-  Our root query field type. Allows us to run any query from our mutation payload.
-  """
-  query: Query
-
-  """Reads a single `User` that is related to this `Address`."""
-  user: User
-}
-
 """All input for the create `User` mutation."""
 input CreateUserInput {
   """
@@ -262,43 +41,6 @@ A point in time as described by the [ISO
 8601](https://en.wikipedia.org/wiki/ISO_8601) standard. May or may not include a timezone.
 """
 scalar Datetime
-
-"""All input for the `deleteAddress` mutation."""
-input DeleteAddressInput {
-  """
-  An arbitrary string value with no semantic meaning. Will be included in the
-  payload verbatim. May be used to track mutations by the client.
-  """
-  clientMutationId: String
-  id: UUID!
-}
-
-"""The output of our delete `Address` mutation."""
-type DeleteAddressPayload {
-  """The `Address` that was deleted by this mutation."""
-  address: Address
-
-  """An edge for our `Address`. May be used by Relay 1."""
-  addressEdge(
-    """The method to use when ordering `Address`."""
-    orderBy: [AddressesOrderBy!] = [PRIMARY_KEY_ASC]
-  ): AddressesEdge
-
-  """
-  The exact same `clientMutationId` that was provided in the mutation input,
-  unchanged and unused. May be used by a client to track mutations.
-  """
-  clientMutationId: String
-  deletedAddressNodeId: ID
-
-  """
-  Our root query field type. Allows us to run any query from our mutation payload.
-  """
-  query: Query
-
-  """Reads a single `User` that is related to this `Address`."""
-  user: User
-}
 
 """All input for the `deleteUser` mutation."""
 input DeleteUserInput {
@@ -352,14 +94,6 @@ type LogoutPayload {
 The root mutation type which contains root level fields which mutate data.
 """
 type Mutation {
-  """Creates a single `Address`."""
-  createAddress(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: CreateAddressInput!
-  ): CreateAddressPayload
-
   """Creates a single `User`."""
   createUser(
     """
@@ -367,14 +101,6 @@ type Mutation {
     """
     input: CreateUserInput!
   ): CreateUserPayload
-
-  """Deletes a single `Address` using a unique key."""
-  deleteAddress(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: DeleteAddressInput!
-  ): DeleteAddressPayload
 
   """Deletes a single `User` using a unique key."""
   deleteUser(
@@ -419,14 +145,6 @@ type Mutation {
     input: ResetPasswordInput!
   ): ResetPasswordPayload
 
-  """Updates a single `Address` using a unique key and a patch."""
-  updateAddress(
-    """
-    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
-    """
-    input: UpdateAddressInput!
-  ): UpdateAddressPayload
-
   """Updates a single `User` using a unique key and a patch."""
   updateUser(
     """
@@ -453,36 +171,6 @@ type PageInfo {
 
 """The root query type which gives access points into the data universe."""
 type Query {
-  address(id: UUID!): Address
-
-  """Reads and enables pagination through a set of `Address`."""
-  addresses(
-    """Read all values in the set after (below) this cursor."""
-    after: Cursor
-
-    """Read all values in the set before (above) this cursor."""
-    before: Cursor
-
-    """
-    A condition to be used in determining which values should be returned by the collection.
-    """
-    condition: AddressCondition
-
-    """Only read the first `n` values of the set."""
-    first: Int
-
-    """Only read the last `n` values of the set."""
-    last: Int
-
-    """
-    Skip the first `n` values from our `after` cursor, an alternative to cursor
-    based pagination. May not be used with `last`.
-    """
-    offset: Int
-
-    """The method to use when ordering `Address`."""
-    orderBy: [AddressesOrderBy!] = [PRIMARY_KEY_ASC]
-  ): AddressesConnection
   currentSessionId: UUID
   currentUser: User
   currentUserId: UUID
@@ -568,47 +256,6 @@ A universally unique identifier as defined by [RFC 4122](https://tools.ietf.org/
 """
 scalar UUID
 
-"""All input for the `updateAddress` mutation."""
-input UpdateAddressInput {
-  """
-  An arbitrary string value with no semantic meaning. Will be included in the
-  payload verbatim. May be used to track mutations by the client.
-  """
-  clientMutationId: String
-  id: UUID!
-
-  """
-  An object where the defined keys will be set on the `Address` being updated.
-  """
-  patch: AddressPatch!
-}
-
-"""The output of our update `Address` mutation."""
-type UpdateAddressPayload {
-  """The `Address` that was updated by this mutation."""
-  address: Address
-
-  """An edge for our `Address`. May be used by Relay 1."""
-  addressEdge(
-    """The method to use when ordering `Address`."""
-    orderBy: [AddressesOrderBy!] = [PRIMARY_KEY_ASC]
-  ): AddressesEdge
-
-  """
-  The exact same `clientMutationId` that was provided in the mutation input,
-  unchanged and unused. May be used by a client to track mutations.
-  """
-  clientMutationId: String
-
-  """
-  Our root query field type. Allows us to run any query from our mutation payload.
-  """
-  query: Query
-
-  """Reads a single `User` that is related to this `Address`."""
-  user: User
-}
-
 """All input for the `updateUser` mutation."""
 input UpdateUserInput {
   """
@@ -648,34 +295,6 @@ type UpdateUserPayload {
 }
 
 type User {
-  """Reads and enables pagination through a set of `Address`."""
-  addresses(
-    """Read all values in the set after (below) this cursor."""
-    after: Cursor
-
-    """Read all values in the set before (above) this cursor."""
-    before: Cursor
-
-    """
-    A condition to be used in determining which values should be returned by the collection.
-    """
-    condition: AddressCondition
-
-    """Only read the first `n` values of the set."""
-    first: Int
-
-    """Only read the last `n` values of the set."""
-    last: Int
-
-    """
-    Skip the first `n` values from our `after` cursor, an alternative to cursor
-    based pagination. May not be used with `last`.
-    """
-    offset: Int
-
-    """The method to use when ordering `Address`."""
-    orderBy: [AddressesOrderBy!] = [PRIMARY_KEY_ASC]
-  ): AddressesConnection!
   createdAt: Datetime!
   email: String!
   id: UUID!
@@ -700,7 +319,6 @@ input UserCondition {
 
 """An input for mutations affecting `User`"""
 input UserInput {
-  addressesUsingId: AddressesUserIdFkeyInverseInput
   createdAt: Datetime
   email: String!
   id: UUID
@@ -712,19 +330,8 @@ input UserInput {
   updatedAt: Datetime
 }
 
-"""The fields on `user` to look up the row to update."""
-input UserOnAddressForAddressesUserIdFkeyUsingUsersPkeyUpdate {
-  id: UUID!
-
-  """
-  An object where the defined keys will be set on the `user` being updated.
-  """
-  patch: updateUserOnAddressForAddressesUserIdFkeyPatch!
-}
-
 """Represents an update to a `User`. Fields that are set will be updated."""
 input UserPatch {
-  addressesUsingId: AddressesUserIdFkeyInverseInput
   createdAt: Datetime
   email: String
   id: UUID
@@ -734,16 +341,6 @@ input UserPatch {
   password: String
   type: String
   updatedAt: Datetime
-}
-
-"""The fields on `user` to look up the row to connect."""
-input UserUsersPkeyConnect {
-  id: UUID!
-}
-
-"""The fields on `user` to look up the row to delete."""
-input UserUsersPkeyDelete {
-  id: UUID!
 }
 
 """A connection to a list of `User` values."""
@@ -781,34 +378,4 @@ enum UsersOrderBy {
   NATURAL
   PRIMARY_KEY_ASC
   PRIMARY_KEY_DESC
-}
-
-"""
-An object where the defined keys will be set on the `address` being updated.
-"""
-input updateAddressOnAddressForAddressesUserIdFkeyPatch {
-  address1: String
-  address2: String
-  contactNumber: String
-  createdAt: Datetime
-  id: UUID
-  isPrimary: Boolean
-  updatedAt: Datetime
-  userToUserId: AddressesUserIdFkeyInput
-}
-
-"""
-An object where the defined keys will be set on the `user` being updated.
-"""
-input updateUserOnAddressForAddressesUserIdFkeyPatch {
-  addressesUsingId: AddressesUserIdFkeyInverseInput
-  createdAt: Datetime
-  email: String
-  id: UUID
-  isAdmin: Boolean
-  isVerified: Boolean
-  name: String
-  password: String
-  type: String
-  updatedAt: Datetime
 }

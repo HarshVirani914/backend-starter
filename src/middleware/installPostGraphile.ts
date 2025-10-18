@@ -240,8 +240,8 @@ export function getPostGraphileOptions({
         },
 
         logout: () => {
-          // @ts-ignore
-          req.logout();
+          // Since we're using JWT (stateless), logout is handled on the client side
+          // by clearing the JWT token. Server-side logout happens via database.
           return Promise.resolve();
         },
       };

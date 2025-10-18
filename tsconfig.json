@@ -1,8 +1,8 @@
 {
   "compilerOptions": {
     "strict": true,
-    "target": "es2017",
-    "lib": ["es2017"],
+    "target": "ES2022",
+    "lib": ["ES2022", "ESNext.Disposable"],
     "noImplicitAny": true,
     "strictNullChecks": true,
     "noUnusedLocals": true,
@@ -20,7 +20,7 @@
     "esModuleInterop": true,
     "resolveJsonModule": true,
     "importHelpers": true,
-    "baseUrl": "src",
+    "skipLibCheck": true,
     "paths": {}
   },
   "include": ["src", ".env", "migrations"]

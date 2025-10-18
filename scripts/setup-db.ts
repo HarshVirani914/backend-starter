@@ -16,13 +16,10 @@ const setupDB = async () => {
   } = process.env;
 
   if (!CONFIRM_DROP) {
-    const { default: inquirer } = await import('inquirer');
-    const input = await inquirer.prompt([
-      {
-        type: 'confirm',
-        name: 'confirm',
-        default: false,
-        message: `
+    const { confirm } = await import('@inquirer/prompts');
+    const input = await confirm({
+      default: false,
+      message: `
           We're going to drop (if necessary):
 
           - database ${DATABASE_NAME}
@@ -31,10 +28,9 @@ const setupDB = async () => {
           - database role ${DATABASE_AUTHENTICATOR} (cascade)
           - database role ${DATABASE_OWNER}
         `,
-      },
-    ]);
+    });
 
-    if (!input.confirm) {
+    if (!input) {
       console.error('Confirmation failed; exiting');
       process.exit(1);
     }
