@@ -5,7 +5,7 @@
   "author": "harsh",
   "license": "MIT",
   "scripts": {
-    "start": "cross-env NODE_ENV=production node dist",
+    "start": "cross-env NODE_ENV=production node dist/src/index.js",
     "dev": "nodemon",
     "build": "tsc",
     "setup": "yarn setup:db && yarn migrate up",
